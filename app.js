@@ -35,16 +35,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(session({
   secret:settings.cookieSecret,
-  key:settings.db,
   cookie:{maxAge:1000*60*60*24*30},
-  resave: false,
-  saveUninitialized: true,
-  store:new MongoStore({
-    db:settings.db,
-    host:settings.host,
-    port:settings.port,
-    url: 'mongodb://localhost/blog'
-  })
+  url:settings.url
 }));
 
 app.use(flash());

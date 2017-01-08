@@ -1,5 +1,7 @@
 
-var mongodb = require('./db');
+// const mongodb = require('./db');
+const mongodb = require('mongodb').Db;
+const settings = require('../settings');
 const crypto = require('crypto');
 
 function User(user){
@@ -22,19 +24,20 @@ User.prototype.save = function(callback){
 		email:this.email,
 		head:head_icon,
 	};
-	mongodb.open(function(error ,db){
+	// mongodb.open(function(error ,db){
+	mongodb.connect(settings.url,function(error,db){
 		if(error){
 			return callback(error);
 		}
 		db.collection('users',function(error,collection){
 			if(error){
-				mongodb.close();
+				db.close();
 				return callback(error);
 			}
 			collection.insert(user,{
 				safe:true
 			},function(error,user){
-				mongodb.close();
+				db.close();
 				if(error){
 					return callback(error);
 				}
@@ -46,20 +49,21 @@ User.prototype.save = function(callback){
 };
 
 User.get = function(name,callback){
-	mongodb.open(function(error,db){
+	// mongodb.open(function(error ,db){
+	mongodb.connect(settings.url,function(error,db){
 		if(error){
 			return callback(error);
 		}
 
 		db.collection('users',function(error,collection){
 			if(error){
-				mongodb.close();
+				db.close();
 				return callback(error);
 			}
 			collection.findOne({
 				name:name
 			},function(error,user){
-				mongodb.close();
+				db.close();
 				if(error){
 					return callback(error);
 				}

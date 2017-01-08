@@ -1,5 +1,7 @@
 
-const mongodb = require('./db');
+// const mongodb = require('./db');
+const mongodb = require('mongodb').Db;
+const settings = require('../settings');
 
  class Comment{
 	constructor(name,day,title,comment){
@@ -14,13 +16,14 @@ const mongodb = require('./db');
 		let day = this.day;
 		let title = this.title;
 		let comment = this.comment;
-		mongodb.open(function(error,db){
+		// mongodb.open(function(error ,db){
+		mongodb.connect(settings.url,function(error,db){
 			if(error){
 				return callback(error);
 			}
 			db.collection('posts',function(error,collection){
 				if(error){
-					mongodb.close();
+					db.close();
 					return callback(error);
 				}
 				collection.update({
@@ -30,7 +33,7 @@ const mongodb = require('./db');
 				},{
 					$push:{'comments':comment}
 				},function(error){
-					mongodb.close();
+					db.close();
 					if(error){
 						return callback(error);
 					}
