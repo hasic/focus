@@ -1,7 +1,7 @@
 
 
 // const mongodb = require('./db');
-const mongodb = require('mongodb').Db;
+const mongodb = require('mongodb').MongoClient;
 const settings = require('../settings');
 const markdown = require('markdown').markdown;
 
